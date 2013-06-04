@@ -47,9 +47,10 @@ class Groups(object):
 
     @property
     def related(self):
-        rel = {}
-        rel["simple"] = self.simple()
-        rel["class"] = self.complex()
+        rel = {
+            "simple": self.simple(),
+            "class": self.complex()
+        }
         return rel
 
 # ---------------------------------------------------------------------------------------------------------------------

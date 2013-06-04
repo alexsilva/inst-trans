@@ -6,7 +6,7 @@ class Remote(object):
     Guard source parameters translation.
     """
 
-    source = "https://translate.google.com.br/translate_a/t"
+    _source = "https://translate.google.com.br/translate_a/t"
 
     _params = [
         ("client", 't'),
@@ -23,12 +23,12 @@ class Remote(object):
         ("sc", 1)
     ]
 
-    headers = {
+    _headers = {
         "Host": 'translate.google.com.br',
         "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:21.0) Gecko/20100101 Firefox/21.0'
     }
 
-    opts = [
+    _opts = [
         ('af', 'Afrikaans'),
         ('sq', 'Albanian'),
         ('ar', 'Arabic'),
@@ -103,3 +103,13 @@ class Remote(object):
     @property
     def params(self):
         return dict(self._params)
+    @property
+    def source(self):
+        return self._source
+    @property
+    def headers(self):
+        return self._headers
+    @property
+    def opts(self):
+        return self._opts
+

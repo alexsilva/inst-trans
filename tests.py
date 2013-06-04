@@ -16,23 +16,18 @@ def translate(text):
 
     # -----------------------------------------------------------------------------------------------------------------
     print
-    print "translation - "+(": ".join(related["simple"]))
-    print
+    print ": ".join(related["simple"])
+    print "=" * 20
     for cls in related["class"]:
-        print "class: "+cls
+        print "class: "+cls["name"]
+        print " words: %s."%("; ".join(cls["words"]))
 
-        words = related["class"][ cls ][:-1]
-        details = related["class"][ cls ][-1]["details"]
-
-        print "\twords: %s."%("; ".join(words))
-
-        for word in words:
-            d = "; ".join(details[word])
-
-            print "\t\t%s >> %s"%(word, d)
+        for word in cls["words"]:
+            d = "; ".join(cls["details"][word])
+            print (" "*2)+"%s = %s"%(word, d)
     print
 # ---------------------------------------------------------------------------------------------------------------------
-print "Crt+C to exit..."
+print "Ctr+C to exit..."
 print
 while True:
     try:

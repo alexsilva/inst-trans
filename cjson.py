@@ -4,12 +4,14 @@ import json
 
 # ---------------------------------------------------------------------------------------------------------------------
 class Json(object):
+    """
+    Corrects and decodes the data in json.
+    """
+
     def __init__(self, data):
         self.data = data
 
     def _clean(self):
-        ## re.search(",/s+,", self.data, re.DOTALL)
-
         while (self.data.find(",,") > 0):
             self.data = self.data.replace(",,", ",")
 

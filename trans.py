@@ -63,6 +63,16 @@ class Engine(object):
         self.config = config
 
     def transl(self):
+        """
+        returns translations in the form of dictionaries.
+
+        where the keys:
+         simple: it is the translation of the text in the form of a list.
+         class: the set of grammatical class.
+          - name: the name of the class.
+          - words: words of grammatical class.
+          - details: details of each word
+        """
         request = self.config.getRequest()
 
         sock = urllib2.urlopen( request )
@@ -70,5 +80,6 @@ class Engine(object):
         sock.close()
 
         cjson = Json(data)
+        groups = Groups(cjson.decode())
 
-        return cjson.decode()
+        return groups.related

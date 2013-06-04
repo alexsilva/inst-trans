@@ -19,29 +19,31 @@ class Groups(object):
         return d
 
     def complex(self):
-        rel = {}
+        group = []
         try: d = self.data[1]
         except IndexError:
             d = []
         for i in d:
             if type(i) is list:
+                rel = {}
                 try:
                     if isinstance(i[0], (str, unicode)):
-                        rel[i[0]] = i[1]
+                        rel["name"] = i[0]
+                        rel["words"]= i[1]
                 except IndexError:
                     continue
+                rel["details"] = {}
                 try:
-                    details = {}
                     for defs in i[-1]:
                         try:
-                            word, _deflist = defs[0], defs[1]
-                            details[word] = _deflist
+                            word, deflist = defs[0], defs[1]
+                            rel["details"][word] = deflist
                         except IndexError:
                             continue
                 except Exception:
-                    continue
-                rel[i[0]].append({"details": details})
-        return rel
+                    pass
+                group.append(rel)
+        return group
 
     @property
     def related(self):

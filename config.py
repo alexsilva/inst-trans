@@ -1,5 +1,5 @@
 # coding: utf-8
-import urllib
+import urllib, urllib2
 from remote import Remote
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -56,3 +56,15 @@ class Config(object):
         params["tl"] = self.tranlation.target
 
         return urllib.urlencode( params )
+
+    def getRequest(self):
+        """
+        Creates the request of translation joining all necessary parameters.
+        return: urllib2 request object(urllib2.Request).
+        """
+        request = urllib2.Request(
+            self.remote.source,
+            data = self._createQuery(),
+            headers = self.remote.headers
+        )
+        return request

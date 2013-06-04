@@ -1,7 +1,7 @@
 # coding: utf-8
 
-from trans import Engine, Groups
-from config import Config, Translation
+from translator.config import Config, Translation
+from translator import Engine
 
 # ---------------------------------------------------------------------------------------------------------------------
 def translate(text):

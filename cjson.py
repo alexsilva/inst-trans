@@ -11,7 +11,7 @@ class Json(object):
         ## re.search(",/s+,", self.data, re.DOTALL)
 
         while (self.data.find(",,") > 0):
-            self.data = self.data.replace(",,")
+            self.data = self.data.replace(",,", ",")
 
     def decode(self):
         self._clean()

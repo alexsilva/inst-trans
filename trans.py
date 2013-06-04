@@ -23,4 +23,4 @@ class Engine(object):
 
         cjson = Json(data)
 
-        return cjson
+        return cjson.decode()

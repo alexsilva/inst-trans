@@ -49,7 +49,7 @@ class Config(object):
         Formats the query string in the format:
         application/x-www-form-urlencoded
         """
-        params = self.translParams # to dict and cache
+        params = self.remote.params # to dict and cache
 
         params["q"]  = self.tranlation.query
         params["sl"] = self.tranlation.source

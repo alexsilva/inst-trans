@@ -6,13 +6,10 @@ from config import Config, Translation
 # ---------------------------------------------------------------------------------------------------------------------
 def translate(text):
     translation = Translation(text, "en", "pt")
-    config = Config( translation )
+    config = Config(translation)
 
-    engine = Engine( config )
-    result =  engine.transl()
-
-    groups = Groups( result )
-    related = groups.related
+    engine = Engine(config)
+    related = engine.transl()
 
     # -----------------------------------------------------------------------------------------------------------------
     print

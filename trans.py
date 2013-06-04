@@ -1,10 +1,26 @@
 # coding: utf-8
 
 import urllib2, urllib
+from config import Config
+from cjson import Json
 
-## https://translate.google.com.br/translate_a/t
-## ?
-## client=t&hl=pt-BR&sl=en&tl=pt&ie=UTF-8&oe=UTF-8&multires=1&prev=btn&ssel=0&tsel=0&sc=1&q=home
 
+# ---------------------------------------------------------------------------------------------------------------------
 class Engine(object):
-    pass
+    """
+    Handles all translation engine.
+    """
+
+    def __init__(self, config):
+        self.config = config
+
+    def trans(self):
+        request = self.config.getRequest()
+
+        sock = urllib2.urlopen( request )
+        data = sock.read()
+        sock.close()
+
+        cjson = Json(data)
+
+        return cjson

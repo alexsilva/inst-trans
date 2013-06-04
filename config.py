@@ -1,4 +1,5 @@
 # coding: utf-8
+import urllib
 
 # ---------------------------------------------------------------------------------------------------------------------
 class Translation(object):
@@ -6,32 +7,53 @@ class Translation(object):
     Sets the source language and target translation.
 
     """
-    def __init__(self, source, translation):
+    def __init__(self, query, source, target):
         """
+        :param query: Word.
         :param source: Language of origin.
-        :param translation: Translation target.
+        :param target: Translation target.
         """
-        self.source = source
-        self.translation = translation
+        self._source = source
+        self._target = target
+        self._query = query
+
+    @property
+    def query(self):
+        return self._query
+    @query.setter
+    def query(self, q):
+        self._query = q
+    @property
+    def source(self):
+        return self._source
+    @source.setter
+    def source(self, src):
+        self._source = src
+    @property
+    def target(self):
+        return self._target
+    @target.setter
+    def target(self, tg):
+        self._target = tg
 
 # ---------------------------------------------------------------------------------------------------------------------
 class Config(object):
     translSource = "https://translate.google.com.br/translate_a/t"
 
-    translParams = {
-        "client": 't',
-        "hl": 'pt-BR', # page locale
-        "sl": '', ## source translation
-        "tl": '', ## translation language
-        "q":  '', ## query translation
-        "ie": 'UTF-8',
-        "oe": 'UTF-8',
-        "multires": 1,
-        "prev": 'btn',
-        "ssel": 0,
-        "tsel": 0,
-        "sc": 1
-    }
+    _translParams = [
+        ("client", 't'),
+        ("hl", 'pt-BR'), ## page locale
+        ("sl", ''),      ## source translation
+        ("tl", ''),      ## translation language
+        ("q",  ''),      ## query translation
+        ("ie", 'UTF-8'),
+        ("oe", 'UTF-8'),
+        ("multires", 1),
+        ("prev", 'btn'),
+        ("ssel", 0),
+        ("tsel", 0),
+        ("sc", 1)
+    ]
 
     transOpts = [
         ('af', 'Afrikaans'),
@@ -105,5 +127,22 @@ class Config(object):
         ('yi', 'Yiddish')
     ]
 
+    @property
+    def translParams(self):
+        return dict(self._translParams)
+
     def __init__(self, tranlation):
         self.tranlation = tranlation
+
+    def _createQuery(self):
+        """
+        Formats the query string in the format:
+        application/x-www-form-urlencoded
+        """
+        params = self.translParams # to dict and cache
+
+        params["q"]  = self.tranlation.query
+        params["sl"] = self.tranlation.source
+        params["tl"] = self.tranlation.target
+
+        return urllib.urlencode( params )

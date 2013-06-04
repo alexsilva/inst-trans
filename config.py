@@ -1,5 +1,20 @@
 # coding: utf-8
 
+# ---------------------------------------------------------------------------------------------------------------------
+class Translation(object):
+    """
+    Sets the source language and target translation.
+
+    """
+    def __init__(self, source, translation):
+        """
+        :param source: Language of origin.
+        :param translation: Translation target.
+        """
+        self.source = source
+        self.translation = translation
+
+# ---------------------------------------------------------------------------------------------------------------------
 class Config(object):
     translSource = "https://translate.google.com.br/translate_a/t"
 
@@ -89,3 +104,6 @@ class Config(object):
         ('cy', 'Welsh'),
         ('yi', 'Yiddish')
     ]
+
+    def __init__(self, tranlation):
+        self.tranlation = tranlation

@@ -23,6 +23,11 @@ class Remote(object):
         ("sc", 1)
     ]
 
+    headers = {
+        "Host": 'translate.google.com.br',
+        "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:21.0) Gecko/20100101 Firefox/21.0'
+    }
+
     opts = [
         ('af', 'Afrikaans'),
         ('sq', 'Albanian'),

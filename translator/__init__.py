@@ -1,4 +1,5 @@
 # coding: utf-8
+__author__ = 'alex'
 
 import urllib2, urllib
 from config import Config

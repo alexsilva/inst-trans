@@ -9,7 +9,7 @@ def translate(text):
     config = Config( translation )
 
     engine = Engine( config )
-    result =  engine.trans()
+    result =  engine.transl()
 
     groups = Groups( result )
     related = groups.related

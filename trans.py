@@ -61,7 +61,7 @@ class Engine(object):
     def __init__(self, config):
         self.config = config
 
-    def trans(self):
+    def transl(self):
         request = self.config.getRequest()
 
         sock = urllib2.urlopen( request )

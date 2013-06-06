@@ -1,4 +1,4 @@
-inst-trans
+Instante Translator
 ==========
 
 The project's goal is to provide translation of words or text just by clicking.

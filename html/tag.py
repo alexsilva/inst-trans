@@ -19,6 +19,9 @@ class Tag(object):
     def __setitem__(self, key, value):
         self.params[key] = value
 
+    def __getitem__(self, key):
+        return self.params[key]
+
     def __str__(self):
         if type(self.params['content']) is list:
             self.params['content'] = [str(t) for t in self.params['content']]
@@ -26,6 +29,9 @@ class Tag(object):
         return '<{type}{space}{style}>{eol}{content}{eol}</{type}>'.format(**self.params)
 
     def __unicode__(self):
-        return self.__class__.__str__(self).decode("utf-8")
+        if type(self.params['content']) is list:
+            self.params['content'] = [u"%s"%t for t in self.params['content']]
+            self.params['content'] = u''.join(self.params['content'])
+        return u'<{type}{space}{style}>{eol}{content}{eol}</{type}>'.format(**self.params)
 
 # ---------------------------------------------------------------------------------------------------------------------

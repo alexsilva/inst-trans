@@ -2,7 +2,7 @@
 
 from PySide import QtGui, QtCore
 from mainw_ui import Ui_mainWindow
-
+from binding import interface
 import sys
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -20,10 +20,28 @@ class MainWindow(QtGui.QMainWindow):
         self.queryTransl.textChanged.connect(self.processTextTransl)
         self.btnTransl.clicked.connect(self.processTextTransl)
 
+        # Connecting the interface events to the main thread.
+        self._interface = interface.Interface()
+        self._interface.start.connect(self.on_start)
+        self._interface.end.connect(self.on_end)
+        self._interface.error.connect(self.on_error)
+
+    def on_start(self, value):
+        print "on_start..."+value
+
+    def on_end(self, value):
+        print "on_end..."+value
+
+    def on_error(self, value):
+        print "on_error..."+value
+
     def processTextTransl(self, text=''):
         text = self.queryTransl.text()
 
-        self.browserTransl.setHtml('<h3 style="color:blue;">%s</3>'%text)
+        #self.browserTransl.setHtml('<h3 style="color:blue;">%s</3>'%text)
+
+        job = interface.Job(text, self._interface)
+        job.start()
 
     def __getattr__(self, name):
         """ Shortens the call attributes ui for self object. """

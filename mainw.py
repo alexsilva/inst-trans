@@ -8,6 +8,7 @@ from html.style import Style
 from html.tag import Tag
 
 import sys
+import md5
 
 # ---------------------------------------------------------------------------------------------------------------------
 class MainWindow(QtGui.QMainWindow):
@@ -39,32 +40,37 @@ class MainWindow(QtGui.QMainWindow):
 
         div = Tag(type='div', content=[])
 
-        h2 = Tag(type='h2')
+        h2 = Tag(type='h2', content=[])
         h2['content'] = ': '.join(transl)
+        h2['style'] = Style(color="blue")
 
         div['content'].append(h2)
         div['content'].append(Tag(type='hr'))
 
         for cls in classes:
             h3 = Tag(type='h3', content=cls["name"])
+            h3['style'] = Style(color='#00FFFF')
             div['content'].append(h3)
 
             ul = Tag(type='ul', content=[])
 
-            for word in cls["words"]:
-                li = Tag(type='li', content=word)
+            for index, word in enumerate(cls["words"]):
+                li = Tag(type='li')
+                li['content'] = Tag(type="a", attr={'href': "#"+word.replace(' ', '-')}, content=word)
                 ul['content'].append(li)
 
             div['content'].append(ul)
 
-            for word in cls["words"]:
+            for index, word in enumerate(cls["words"]):
                 strong = Tag(type="strong", content="%s =" % word)
-                div['content'].append(strong)
+
+                details_div = Tag(type='div', attr={'id': word.replace(' ', '-')}, content=[])
+                details_div['content'].append(strong)
 
                 i = Tag(type="i", content='; '.join(cls["details"][word]))
+                details_div['content'].append(i)
 
-                div['content'].append(i)
-                div['content'].append(Tag(type="br"))
+                div['content'].append(details_div)
         self.browserTransl.setHtml(unicode(div))
 
     def on_error(self, value):

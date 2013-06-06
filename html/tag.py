@@ -8,13 +8,14 @@ class Tag(object):
     content:
     """
 
-    _str_repr = '<{type}{space}{style}>{eol}{content}{eol}</{type}>'
-    _unicode_repr = u'<{type}{space}{style}>{eol}{content}{eol}</{type}>'
+    _str_repr = '<{type}{space}{class}{space}{id}{style}>{eol}{content}{eol}</{type}>'
+    _unicode_repr = u'<{type}{space}{class}{space}{id}{space}{style}>{eol}{content}{eol}</{type}>'
 
     def __init__(self, **params):
         self.params = params
-
         self.params['content'] = params.get('content', [])
+        self.params['class'] = params.get('class', '')
+        self.params['id'] = params.get('id', '')
         self.params['style'] = params.get('style', "")
         self.params['space'] = params.get('space', " ")
         self.params['eol'] = params.get('eol', "\n")

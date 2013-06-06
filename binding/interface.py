@@ -2,10 +2,13 @@
 from PySide import QtCore
 import threading
 
+from translator.config import Config, Translation
+from translator import Engine
+
 # ---------------------------------------------------------------------------------------------------------------------
 class Interface(QtCore.QObject):
     start = QtCore.Signal(str)  # Issued at the beginning of the thread processing the Job.
-    end = QtCore.Signal(str)  # issued at the end of the thread processing the Job.
+    end = QtCore.Signal(dict)  # issued at the end of the thread processing the Job.
     error = QtCore.Signal(str)  # issued when an exception was raised in the Job processing thread.
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -22,7 +25,14 @@ class Job(threading.Thread):
     def run(self):
         try:
             self.signal.start.emit('start')
-        except:
-            self.signal.error.emit('error')
+
+            translation = Translation(self.text, 'en', 'pt')
+            config = Config(translation)
+            engine = Engine(config)
+
+            obj = engine.transl()
+        except Exception as err:
+            self.signal.error.emit(str(err))
+            obj = {}
         finally:
-            self.signal.end.emit('end')
+            self.signal.end.emit(obj)

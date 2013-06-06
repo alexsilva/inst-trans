@@ -17,7 +17,7 @@ class MainWindow(QtGui.QMainWindow):
         self.uiMainWindow = Ui_mainWindow()
         self.uiMainWindow.setupUi(self)
 
-        self.queryTransl.textChanged.connect(self.processTextTransl)
+        self.queryTransl.returnPressed.connect(self.processTextTransl)
         self.btnTransl.clicked.connect(self.processTextTransl)
 
         # Connecting the interface events to the main thread.
@@ -27,18 +27,35 @@ class MainWindow(QtGui.QMainWindow):
         self._interface.error.connect(self.on_error)
 
     def on_start(self, value):
-        print "on_start..."+value
+        print value
 
-    def on_end(self, value):
-        print "on_end..."+value
+    def on_end(self, obj):
+        transl = obj.get("simple", [])
+        classes = obj.get("class", [])
+
+        html = ['<h3>%s</h3>'%(': '.join(transl))]
+        html.append('<hr>')
+
+        for cls in classes:
+            html.append('<p>%s</p>' % cls["name"])
+
+            html.append('<ul>')
+            for word in cls["words"]:
+                html.append('<li>%s</li>'%word)
+            html.append('</ul>')
+
+            for word in cls["words"]:
+                html.append('<strong>%s = </strong>'%word)
+                text = '; '.join(cls["details"][word])
+                html.append('<i>%s</i>'%text)
+                html.append('<br/>')
+        self.browserTransl.setHtml(u''.join(html))
 
     def on_error(self, value):
         print "on_error..."+value
 
     def processTextTransl(self, text=''):
         text = self.queryTransl.text()
-
-        #self.browserTransl.setHtml('<h3 style="color:blue;">%s</3>'%text)
 
         job = interface.Job(text, self._interface)
         job.start()

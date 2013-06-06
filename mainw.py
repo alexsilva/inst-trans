@@ -3,6 +3,10 @@
 from PySide import QtGui, QtCore
 from mainw_ui import Ui_mainWindow
 from binding import interface
+
+from html.style import Style
+from html.tag import Tag
+
 import sys
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -33,23 +37,35 @@ class MainWindow(QtGui.QMainWindow):
         transl = obj.get("simple", [])
         classes = obj.get("class", [])
 
-        html = ['<h3>%s</h3>'%(': '.join(transl))]
-        html.append('<hr>')
+        div = Tag(type='div', content=[])
+
+        h2 = Tag(type='h2')
+        h2['content'] = ': '.join(transl)
+
+        div['content'].append(h2)
+        div['content'].append(Tag(type='hr'))
 
         for cls in classes:
-            html.append('<p>%s</p>' % cls["name"])
+            h3 = Tag(type='h3', content=cls["name"])
+            div['content'].append(h3)
 
-            html.append('<ul>')
-            for word in cls["words"]:
-                html.append('<li>%s</li>'%word)
-            html.append('</ul>')
+            ul = Tag(type='ul', content=[])
 
             for word in cls["words"]:
-                html.append('<strong>%s = </strong>'%word)
-                text = '; '.join(cls["details"][word])
-                html.append('<i>%s</i>'%text)
-                html.append('<br/>')
-        self.browserTransl.setHtml(u''.join(html))
+                li = Tag(type='li', content=word)
+                ul['content'].append(li)
+
+            div['content'].append(ul)
+
+            for word in cls["words"]:
+                strong = Tag(type="strong", content="%s =" % word)
+                div['content'].append(strong)
+
+                i = Tag(type="i", content='; '.join(cls["details"][word]))
+
+                div['content'].append(i)
+                div['content'].append(Tag(type="br"))
+        self.browserTransl.setHtml(unicode(div))
 
     def on_error(self, value):
         print "on_error..."+value

@@ -8,6 +8,9 @@ class Tag(object):
     content:
     """
 
+    _str_repr = '<{type}{space}{style}>{eol}{content}{eol}</{type}>'
+    _unicode_repr = u'<{type}{space}{style}>{eol}{content}{eol}</{type}>'
+
     def __init__(self, **params):
         self.params = params
 
@@ -22,16 +25,17 @@ class Tag(object):
     def __getitem__(self, key):
         return self.params[key]
 
-    def __str__(self):
+    def __convert(self, _u_str, method):
         if type(self.params['content']) is list:
-            self.params['content'] = [str(t) for t in self.params['content']]
-            self.params['content'] = ''.join(self.params['content'])
-        return '<{type}{space}{style}>{eol}{content}{eol}</{type}>'.format(**self.params)
+            self.params['content'] = [method(item) for item in self.params['content']]
+            self.params['content'] = _u_str.join(self.params['content'])
+
+    def __str__(self):
+        self.__convert('', str)
+        return self._str_repr.format(**self.params)
 
     def __unicode__(self):
-        if type(self.params['content']) is list:
-            self.params['content'] = [u"%s"%t for t in self.params['content']]
-            self.params['content'] = u''.join(self.params['content'])
-        return u'<{type}{space}{style}>{eol}{content}{eol}</{type}>'.format(**self.params)
+        self.__convert(u'', lambda v: u'%s' % v)
+        return self._unicode_repr.format(**self.params)
 
 # ---------------------------------------------------------------------------------------------------------------------

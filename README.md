@@ -1,71 +1,19 @@
 inst-trans
 ==========
 
-Automated translations in a click.
+The project's goal is to provide translation of words or text just by clicking.
+The system will work click emulating mouse clicks and copying the content to the clipboard, where it will be captured for the application.
 
-Running the "tests.py" and its results:
+As the content of the translation from a remote source comes a cache system will be implemented, reducing overhead on the network connections.
+
+Still under development, so all features will be implemented.
+
+
+Project written in python, using as PySide GUI.
+PySide wiki: http://qt-project.org/wiki/PySide
+
+PySide is currently the only dependence (requirement) project. Binary are easily found for download.
+
+Follow developments in the wiki.
 ==========
-
-Ctr+C to exit...
-
-Translation [en to pt]: car
-
-car: carro
-
-class: substantivo
-
- words: carro; automóvel; viatura; vagão; carruagem; cabine de elevador; carro de máquina de escrever.
- 
-  carro = car; carriage; vehicle; automobile; auto; lorry
-  
-  automóvel = car; automobile; vehicle; motor; motor car; machine
-  
-  viatura = car; vehicle; carriage
-  
-  vagão = wagon; car; waggon; caboose
-  
-  carruagem = carriage; coach; car; vehicle; equipage; barouche
-  
-  cabine de elevador = car
-  
-  carro de máquina de escrever = car
-
-Translation [en to pt]: book
-
-book: livro
-
-class: substantivo
-
- words: livro; caderno; bloco; registro; talão; livro contábil; texto de peça teatral; letra de ópera.
- 
-  livro = book; volume
-  
-  caderno = notebook; book; copybook; exercise book
-  
-  bloco = block; bloc; pad; book
-  
-  registro = registry; record; registration; register; recording; book
-  
-  talão = coupon; book; talon; chequebook
-  
-  livro contábil = book
-  
-  texto de peça teatral = book
-  
-  letra de ópera = book
-  
-class: verbo
-
- words: reservar; registrar; marcar; despachar; comprar um bilhete; inscrever-se.
- 
-  reservar = book; reserve; earmark; put aside; destine; set by
-  
-  registrar = register; record; book; enroll; list; write down
-  
-  marcar = mark; dial; book; brand; show; stamp
-  
-  despachar = dispatch; send; despatch; expedite; forward; book
-  
-  comprar um bilhete = book
-  
-  inscrever-se = book; sign up; matriculate
+https://github.com/alexsilva/inst-trans/wiki/Instante-tranlator

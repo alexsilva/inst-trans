@@ -16,6 +16,9 @@ class Tag(object):
         self.params['space'] = params.get('space', " ")
         self.params['eol'] = params.get('eol', "\n")
 
+    def __setitem__(self, key, value):
+        self.params[key] = value
+
     def __str__(self):
         if type(self.params['content']) is list:
             self.params['content'] = [str(t) for t in self.params['content']]

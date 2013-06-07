@@ -41,8 +41,18 @@ class Word(models.Model):
     """
     word:
     """
-    word = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
     grammaticalClass = models.ForeignKey("GrammaticalClass")
 
     def __unicode__(self):
         return self.word
+
+class ReverseWord(models.Model):
+    """
+    reverse:
+    """
+    name = models.CharField(max_length=255)
+    word = models.ForeignKey("Word")
+
+    def __unicode__(self):
+        return self.name

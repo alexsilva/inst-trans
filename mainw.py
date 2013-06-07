@@ -7,6 +7,8 @@ from html.style import Style
 from html.tag import Tag
 
 from db import models
+from django.template.loader import get_template
+from django.template import Context
 import sys
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -47,60 +49,29 @@ class MainWindow(QtGui.QMainWindow):
             gc = models.GrammaticalClass(name=_cls["name"], translation=transl)
             gc.save()
 
-            for _word in _cls['words']:
-                word = models.Word(word=_word, grammaticalClass=gc)
+            for name in _cls['words']:
+                word = models.Word(name=name, grammaticalClass=gc)
                 word.save()
 
-    def onEndTransl(self, obj=None, query=None):
-        if not obj is None:
-            transl = obj.get("simple", [])
-            classes = obj.get("class", [])
+                for detail in _cls["details"][name]:
+                    word.reverseword_set.create(name=detail)
+        return transl
 
-            q = models.Translation.objects.filter(source=transl[0])
+    def onEndTransl(self, query):
+        if not isinstance(query, models.Translation):
+            simple = query.get("simple", [])
+            classes = query.get("class", [])
 
-            if len(transl) > 1 and q.count() == 0:
-                self.cacheTransl(transl, classes)
+            query = self.cacheTransl(simple, classes)
+        else:
+            print 'in cache...'
+        tmpl = get_template('translation.html')
 
-        elif not query is None:
-            transl = query.simple
-            classes = []#query.grammaticalclass_set.all()
-            print 'using cache...'
+        html = tmpl.render(Context({
+            'queryset': query
+        }))
 
-        # ---------------------------------------------------------------------
-        div = Tag(type='div', content=[])
-
-        h2 = Tag(type='h2', content=[])
-        h2['content'] = ': '.join(transl)
-        h2['style'] = Style(color="blue")
-
-        div['content'].append(h2)
-        div['content'].append(Tag(type='hr'))
-
-        for cls in classes:
-            h3 = Tag(type='h3', content=cls["name"])
-            h3['style'] = Style(color='#00FFFF')
-            div['content'].append(h3)
-
-            ul = Tag(type='ul', content=[])
-
-            for index, word in enumerate(cls["words"]):
-                li = Tag(type='li')
-                li['content'] = Tag(type="a", attr={'href': "#"+word.replace(' ', '-')}, content=word)
-                ul['content'].append(li)
-
-            div['content'].append(ul)
-
-            for index, word in enumerate(cls["words"]):
-                strong = Tag(type="strong", content="%s =" % word)
-
-                details_div = Tag(type='div', attr={'id': word.replace(' ', '-')}, content=[])
-                details_div['content'].append(strong)
-
-                i = Tag(type="i", content='; '.join(cls["details"][word]))
-                details_div['content'].append(i)
-
-                div['content'].append(details_div)
-        self.browserTransl.setHtml(unicode(div))
+        self.browserTransl.setHtml(html)
 
     def onErrorTransl(self, value):
         print "on_error..."+value
@@ -117,7 +88,7 @@ class MainWindow(QtGui.QMainWindow):
             job = interface.Job(text, self._interface)
             job.start()
         else:
-            self.onEndTransl(query=query)
+            self.onEndTransl(query)
 
     def __getattr__(self, name):
         """ Shortens the call attributes ui for self object. """

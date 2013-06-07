@@ -1,4 +1,27 @@
 
-<p>
-    OK
-</p>
+<h2>{{ queryset.source }}: {{ queryset.target }}</h2>
+<hr>
+
+{% for grammaticalclass in queryset.grammaticalclass_set.all %}
+
+    <h3>{{ grammaticalclass.name }}</h3>
+
+    <ul>
+        {% for word in grammaticalclass.word_set.all %}
+            <li>{{ word.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <div>
+        {% for word in grammaticalclass.word_set.all %}
+            <strong>{{ word.name }}</strong>
+
+            <i>
+                {% for reverseword in word.reverseword_set.all %}
+                    {{ reverseword.name }};
+                {% endfor %}
+            </i>
+            <br/>
+        {% endfor %}
+    </div>
+{% endfor %}

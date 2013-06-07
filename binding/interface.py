@@ -4,11 +4,12 @@ import threading
 
 from translator.config import Config, Translation
 from translator import Engine
+from db import models
 
 # ---------------------------------------------------------------------------------------------------------------------
 class Interface(QtCore.QObject):
     start = QtCore.Signal(str)  # Issued at the beginning of the thread processing the Job.
-    end = QtCore.Signal(dict)  # issued at the end of the thread processing the Job.
+    end = QtCore.Signal(models.Translation)  # issued at the end of the thread processing the Job.
     error = QtCore.Signal(str)  # issued when an exception was raised in the Job processing thread.
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -22,6 +23,29 @@ class Job(threading.Thread):
         self.signal = signal
         self.text = text
 
+    def _cache_data(self, simple, cls):
+        """"""
+        query = models.Translation(
+            source=simple[0],
+            target=simple[1],
+
+            sourceLocale='en',
+            targetLocale='pt'
+        )
+        query.save()
+
+        for _cls in cls:
+            gc = models.GrammaticalClass(name=_cls["name"], translation=query)
+            gc.save()
+
+            for name in _cls['words']:
+                word = models.Word(name=name, grammaticalClass=gc)
+                word.save()
+
+                for detail in _cls["details"][name]:
+                    word.reverseword_set.create(name=detail)
+        return query
+
     def run(self):
         try:
             self.signal.start.emit('start')
@@ -30,9 +54,12 @@ class Job(threading.Thread):
             config = Config(translation)
             engine = Engine(config)
 
-            obj = engine.transl()
+            related = engine.transl()
+            simple = related.get("simple", [])
+            classes = related.get("class", [])
+
+            query = self._cache_data(simple, classes)
         except Exception as err:
             self.signal.error.emit(str(err))
-            obj = {}
-        finally:
-            self.signal.end.emit(obj)
+        else:
+            self.signal.end.emit(query)

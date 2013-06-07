@@ -59,12 +59,8 @@ class MainWindow(QtGui.QMainWindow):
 
     def onEndTransl(self, query):
         if not isinstance(query, models.Translation):
-            simple = query.get("simple", [])
-            classes = query.get("class", [])
+            return
 
-            query = self.cacheTransl(simple, classes)
-        else:
-            print 'in cache...'
         tmpl = get_template('translation.html')
 
         html = tmpl.render(Context({

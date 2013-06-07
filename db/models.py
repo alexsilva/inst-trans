@@ -45,7 +45,7 @@ class Word(models.Model):
     grammaticalClass = models.ForeignKey("GrammaticalClass")
 
     def __unicode__(self):
-        return self.word
+        return self.name
 
 class ReverseWord(models.Model):
     """

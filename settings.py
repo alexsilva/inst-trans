@@ -1,4 +1,7 @@
 # coding: utf-8
+import os
+
+SCRIPT_PATH = os.path.dirname(__file__)
 
 # Django settings for project.
 DEBUG = True
@@ -82,7 +85,7 @@ STATICFILES_FINDERS = ()
 SECRET_KEY = '%p(gve*17ag+48oq%s9yn^o+r7y$7sm-#j^-46_%@#(b$kpoz)'
 
 # List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = ()
+TEMPLATE_LOADERS = ('django.template.loaders.filesystem.Loader', )
 
 MIDDLEWARE_CLASSES = ()
 
@@ -91,7 +94,7 @@ ROOT_URLCONF = ''
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = ''
 
-TEMPLATE_DIRS = ()
+TEMPLATE_DIRS = (os.path.join(SCRIPT_PATH,"templates").replace(os.sep,"/"))
 
 INSTALLED_APPS = ("db", )
 

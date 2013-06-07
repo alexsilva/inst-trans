@@ -35,28 +35,6 @@ class MainWindow(QtGui.QMainWindow):
     def onStartTransl(self, value):
         print value
 
-    def cacheTransl(self, simple, cls):
-        """"""
-        transl = models.Translation(
-            source=simple[0],
-            target=simple[1],
-            sourceLocale='en',
-            targetLocale='pt'
-        )
-        transl.save()
-
-        for _cls in cls:
-            gc = models.GrammaticalClass(name=_cls["name"], translation=transl)
-            gc.save()
-
-            for name in _cls['words']:
-                word = models.Word(name=name, grammaticalClass=gc)
-                word.save()
-
-                for detail in _cls["details"][name]:
-                    word.reverseword_set.create(name=detail)
-        return transl
-
     def onEndTransl(self, query):
         if not isinstance(query, models.Translation):
             return

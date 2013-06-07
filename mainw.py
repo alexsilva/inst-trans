@@ -3,12 +3,11 @@
 from PySide import QtGui, QtCore
 from mainw_ui import Ui_mainWindow
 from binding import interface
-
 from html.style import Style
 from html.tag import Tag
 
+from db import models
 import sys
-import md5
 
 # ---------------------------------------------------------------------------------------------------------------------
 class MainWindow(QtGui.QMainWindow):
@@ -34,10 +33,40 @@ class MainWindow(QtGui.QMainWindow):
     def on_start(self, value):
         print value
 
-    def on_end(self, obj):
-        transl = obj.get("simple", [])
-        classes = obj.get("class", [])
+    def cacheTransl(self, simple, cls):
+        """"""
+        transl = models.Translation(
+            source=simple[0],
+            target=simple[1],
+            sourceLocale='en',
+            targetLocale='pt'
+        )
+        transl.save()
 
+        for _cls in cls:
+            gc = models.GrammaticalClass(name=_cls["name"], translation=transl)
+            gc.save()
+
+            for _word in _cls['words']:
+                word = models.Word(word=_word, grammaticalClass=gc)
+                word.save()
+
+    def on_end(self, obj=None, query=None):
+        if not obj is None:
+            transl = obj.get("simple", [])
+            classes = obj.get("class", [])
+
+            q = models.Translation.objects.filter(source=transl[0])
+
+            if len(transl) > 1 and q.count() == 0:
+                self.cacheTransl(transl, classes)
+
+        elif not query is None:
+            transl = query.simple
+            classes = []#query.grammaticalclass_set.all()
+            print 'using cache...'
+
+        # ---------------------------------------------------------------------
         div = Tag(type='div', content=[])
 
         h2 = Tag(type='h2', content=[])
@@ -79,8 +108,16 @@ class MainWindow(QtGui.QMainWindow):
     def processTextTransl(self, text=''):
         text = self.queryTransl.text()
 
-        job = interface.Job(text, self._interface)
-        job.start()
+        try:
+            query = models.Translation.objects.get(source=text)
+        except models.Translation.DoesNotExist:
+            query = None
+
+        if query is None:
+            job = interface.Job(text, self._interface)
+            job.start()
+        else:
+            self.on_end(query=query)
 
     def __getattr__(self, name):
         """ Shortens the call attributes ui for self object. """

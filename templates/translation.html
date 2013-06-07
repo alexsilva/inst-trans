@@ -4,26 +4,42 @@
             #gm_cls {
                 color: blue;
             }
+            .gm_cls_group {
+                background-color: antiquewhite;
+                border-bottom-color: red;
+            }
+            #top-box {
+                background-color: blanchedalmond;
+            }
+            h2 {
+                text-align: center;
+            }
+            #dtl_word {
+                background-color: aliceblue;
+            }
         </style>
     </head>
 
-    <h2>{{ queryset.source }}: {{ queryset.target }}</h2>
+    <div id="top-box">
+        <h2>{{ queryset.source }} - {{ queryset.target }}</h2>
+    </div>
     <hr>
 
     {% for grammaticalclass in queryset.grammaticalclass_set.all %}
-
-        <h3 id="gm_cls">{{ grammaticalclass.name }}</h3>
-
-        <ul>
-            {% for word in grammaticalclass.word_set.all %}
-                <li><a href="#{{ word.name }}">{{ word.name }}</a></li>
-            {% endfor %}
-        </ul>
-
+        <div class="gm_cls_group">
+            <h3 id="gm_cls">{{ grammaticalclass.name }}</h3>
+            <ul>
+                {% for word in grammaticalclass.word_set.all %}
+                    <li>
+                        <a href="#{{ word.name }}">{{ word.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
 
         {% for word in grammaticalclass.word_set.all %}
             <div id="{{ word.name }}">
-                <strong>{{ word.name }}: </strong>
+                <strong id="dtl_word">{{ word.name }}: </strong>
 
                 <i>
                     {% for reverseword in word.reverseword_set.all %}

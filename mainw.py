@@ -26,11 +26,11 @@ class MainWindow(QtGui.QMainWindow):
 
         # Connecting the interface events to the main thread.
         self._interface = interface.Interface()
-        self._interface.start.connect(self.on_start)
-        self._interface.end.connect(self.on_end)
-        self._interface.error.connect(self.on_error)
+        self._interface.start.connect(self.onStartTransl)
+        self._interface.end.connect(self.onEndTransl)
+        self._interface.error.connect(self.onErrorTransl)
 
-    def on_start(self, value):
+    def onStartTransl(self, value):
         print value
 
     def cacheTransl(self, simple, cls):
@@ -51,7 +51,7 @@ class MainWindow(QtGui.QMainWindow):
                 word = models.Word(word=_word, grammaticalClass=gc)
                 word.save()
 
-    def on_end(self, obj=None, query=None):
+    def onEndTransl(self, obj=None, query=None):
         if not obj is None:
             transl = obj.get("simple", [])
             classes = obj.get("class", [])
@@ -102,7 +102,7 @@ class MainWindow(QtGui.QMainWindow):
                 div['content'].append(details_div)
         self.browserTransl.setHtml(unicode(div))
 
-    def on_error(self, value):
+    def onErrorTransl(self, value):
         print "on_error..."+value
 
     def processTextTransl(self, text=''):
@@ -117,7 +117,7 @@ class MainWindow(QtGui.QMainWindow):
             job = interface.Job(text, self._interface)
             job.start()
         else:
-            self.on_end(query=query)
+            self.onEndTransl(query=query)
 
     def __getattr__(self, name):
         """ Shortens the call attributes ui for self object. """

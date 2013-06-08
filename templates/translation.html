@@ -42,7 +42,7 @@
                 <strong id="dtl_word">{{ word.name }}: </strong>
 
                 <i>
-                    {% for reverseword in word.reverseword_set.all %}
+                    {% for reverseword in word.reversewords.all %}
                         {{ reverseword.name }};
                     {% endfor %}
                 </i>

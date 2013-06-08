@@ -52,6 +52,9 @@ class MainWindow(QtGui.QMainWindow):
 
     def processTextTransl(self, text=''):
         text = self.queryTransl.text()
+        text = text.strip()
+
+        self.queryTransl.setText(text)
 
         try:
             query = models.Translation.objects.get(source=text)

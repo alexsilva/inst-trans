@@ -25,25 +25,25 @@ class Job(threading.Thread):
 
     def _cache_data(self, simple, cls):
         """"""
-        query = models.Translation(
+        query = models.Translation.objects.create(
             source=simple[0],
             target=simple[1],
-
             sourceLocale='en',
             targetLocale='pt'
         )
-        query.save()
-
         for _cls in cls:
-            gc = models.GrammaticalClass(name=_cls["name"], translation=query)
-            gc.save()
+            grammaticalclass = models.GrammaticalClass(name=_cls["name"], translation=query)
+            grammaticalclass.save()
 
             for name in _cls['words']:
-                word = models.Word(name=name, grammaticalClass=gc)
+                name = name.strip()
+                word = models.Word(name=name, grammaticalClass=grammaticalclass)
                 word.save()
 
-                for detail in _cls["details"][name]:
-                    word.reverseword_set.create(name=detail)
+                for name in _cls["details"][name]:
+                    name = name.strip()
+                    obj, created = models.ReverseWord.objects.get_or_create(name=name)
+                    word.reversewords.add(obj)
         return query
 
     def run(self):

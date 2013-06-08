@@ -39,6 +39,8 @@ class MainWindow(QtGui.QMainWindow):
         self.queryTransl.returnPressed.connect(self.processTextTransl)
         self.btnTransl.clicked.connect(self.processTextTransl)
 
+        self.queryTransl.textChanged.connect(self.doFastTranslation)
+
         # Connecting the interface events to the main thread.
         self._interface = interface.Interface()
         self._interface.start.connect(self.onStartTransl)
@@ -53,6 +55,16 @@ class MainWindow(QtGui.QMainWindow):
         timer = QtCore.QTimer(self)
         timer.timeout.connect(self._update)
         timer.start()
+
+    def getTranslationQuery(self, text):
+        try: query = models.Translation.objects.get(source=text)
+        except models.Translation.DoesNotExist:
+            query = None
+        return query
+
+    def doFastTranslation(self, text):
+        if self.getTranslationQuery(text.strip()) is not None:
+            self.processTextTransl()
 
     def _update(self):
         self.progress.setPixmap(self.progressMovie.currentPixmap())
@@ -77,20 +89,13 @@ class MainWindow(QtGui.QMainWindow):
 
     def onErrorTransl(self, value):
         self.progressMovie.stop()
-        print "on_error..."+value
+        print "Error: "+value
 
     def processTextTransl(self, text=''):
         self.progressMovie.jumpToNextFrame()
+        text = self.queryTransl.text().strip()
 
-        text = self.queryTransl.text()
-        text = text.strip()
-
-        self.queryTransl.setText(text)
-
-        try:
-            query = models.Translation.objects.get(source=text)
-        except models.Translation.DoesNotExist:
-            query = None
+        query = self.getTranslationQuery(text)
 
         if query is None:
             job = interface.Job(text, self._interface)

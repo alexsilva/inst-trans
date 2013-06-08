@@ -9,13 +9,26 @@ from html.tag import Tag
 from db import models
 from django.template.loader import get_template
 from django.template import Context
-import sys
+from django.conf import settings
+import sys, os
+
+# ---------------------------------------------------------------------------------------------------------------------
+Pixmap = QtGui.QPixmap
+def pixmap(*args, **kwargs):
+    """ Corrects images for the site due to errors in the ui file converter. """
+    args = list(args)
+    if isinstance(args[0],(str, unicode)):
+        filename = os.path.basename(args[0])
+        args[0] = os.path.join(settings.IMAGES_PATH, filename)
+    return Pixmap(*args, **kwargs)
+QtGui.QPixmap = pixmap
 
 # ---------------------------------------------------------------------------------------------------------------------
 class MainWindow(QtGui.QMainWindow):
     """
     Represents the main program window.
     """
+    spinPath = os.path.join(settings.IMAGES_PATH,"spin-progress.gif")
 
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -32,10 +45,25 @@ class MainWindow(QtGui.QMainWindow):
         self._interface.end.connect(self.onEndTransl)
         self._interface.error.connect(self.onErrorTransl)
 
+        self.progressMovie = QtGui.QMovie(self.spinPath)
+        self.progressMovie.jumpToNextFrame()
+
+        self.progress.setPixmap(self.progressMovie.currentPixmap())
+
+        timer = QtCore.QTimer(self)
+        timer.timeout.connect(self._update)
+        timer.start()
+
+    def _update(self):
+        self.progress.setPixmap(self.progressMovie.currentPixmap())
+
     def onStartTransl(self, value):
+        self.progressMovie.start()
         print value
 
     def onEndTransl(self, query):
+        self.progressMovie.stop()
+
         if not isinstance(query, models.Translation):
             return
 
@@ -48,9 +76,12 @@ class MainWindow(QtGui.QMainWindow):
         self.browserTransl.setHtml(html)
 
     def onErrorTransl(self, value):
+        self.progressMovie.stop()
         print "on_error..."+value
 
     def processTextTransl(self, text=''):
+        self.progressMovie.jumpToNextFrame()
+
         text = self.queryTransl.text()
         text = text.strip()
 

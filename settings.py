@@ -2,6 +2,7 @@
 import os
 
 SCRIPT_PATH = os.path.dirname(__file__)
+IMAGES_PATH = os.path.join(SCRIPT_PATH,'images')
 
 # Django settings for project.
 DEBUG = True

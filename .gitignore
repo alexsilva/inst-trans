@@ -5,6 +5,7 @@
 test.db
 keys
 .idea
+venv
 
 # Packages
 *.egg

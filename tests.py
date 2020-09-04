@@ -1,7 +1,8 @@
 # coding: utf-8
 
-from translator.config import Config, Translation
 from translator import Engine
+from translator.config import Config, Translation
+
 
 # ---------------------------------------------------------------------------------------------------------------------
 def translate(text):
@@ -16,13 +17,15 @@ def translate(text):
     print ": ".join(related["simple"])
     print "=" * 20
     for cls in related["class"]:
-        print "class: "+cls["name"]
-        print " words: %s."%("; ".join(cls["words"]))
+        print "class: " + cls["name"]
+        print " words: %s." % ("; ".join(cls["words"]))
 
         for word in cls["words"]:
             d = "; ".join(cls["details"][word])
-            print (" "*2)+"%s = %s"%(word, d)
+            print (" " * 2) + "%s = %s" % (word, d)
     print
+
+
 # ---------------------------------------------------------------------------------------------------------------------
 print "Ctr+C to exit..."
 print

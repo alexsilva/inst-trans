@@ -1,34 +1,39 @@
 # coding: utf-8
 
-from PySide import QtGui, QtCore
-from mainw_ui import Ui_mainWindow
-from binding import interface
-from html.style import Style
-from html.tag import Tag
+import os
+import sys
 
-from db import models
-from django.template.loader import get_template
-from django.template import Context
+from PySide import QtGui, QtCore
 from django.conf import settings
-import sys, os
+from django.template import Context
+from django.template.loader import get_template
+
+from binding import interface
+from db import models
+from mainw_ui import Ui_mainWindow
 
 # ---------------------------------------------------------------------------------------------------------------------
 Pixmap = QtGui.QPixmap
+
+
 def pixmap(*args, **kwargs):
     """ Corrects images for the site due to errors in the ui file converter. """
     args = list(args)
-    if isinstance(args[0],(str, unicode)):
+    if isinstance(args[0], (str, unicode)):
         filename = os.path.basename(args[0])
         args[0] = os.path.join(settings.IMAGES_PATH, filename)
     return Pixmap(*args, **kwargs)
+
+
 QtGui.QPixmap = pixmap
+
 
 # ---------------------------------------------------------------------------------------------------------------------
 class MainWindow(QtGui.QMainWindow):
     """
     Represents the main program window.
     """
-    spinPath = os.path.join(settings.IMAGES_PATH,"spin-progress.gif")
+    spinPath = os.path.join(settings.IMAGES_PATH, "spin-progress.gif")
 
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -57,7 +62,8 @@ class MainWindow(QtGui.QMainWindow):
         timer.start()
 
     def getTranslationQuery(self, text):
-        try: query = models.Translation.objects.get(source=text)
+        try:
+            query = models.Translation.objects.get(source=text)
         except models.Translation.DoesNotExist:
             query = None
         return query
@@ -89,7 +95,7 @@ class MainWindow(QtGui.QMainWindow):
 
     def onErrorTransl(self, value):
         self.progressMovie.stop()
-        print "Error: "+value
+        print "Error: " + value
 
     def processTextTransl(self, text=''):
         self.progressMovie.jumpToNextFrame()
@@ -106,7 +112,7 @@ class MainWindow(QtGui.QMainWindow):
     def __getattr__(self, name):
         """ Shortens the call attributes ui for self object. """
         attr = (getattr(self.uiMainWindow, name) if hasattr(self.uiMainWindow, name)
-                else super(MainWindow,self).__getattr__(name))
+                else super(MainWindow, self).__getattr__(name))
         return attr
 
 

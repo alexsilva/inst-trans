@@ -2,4 +2,5 @@
 __author__ = 'alex'
 
 import os
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")

@@ -10,10 +10,10 @@ class Remote(object):
 
     _params = [
         ("client", 't'),
-        ("hl", 'pt-BR'), ## page locale
-        ("sl", ''),      ## source translation
-        ("tl", ''),      ## translation language
-        ("q",  ''),      ## query translation
+        ("hl", 'pt-BR'),  ## page locale
+        ("sl", ''),  ## source translation
+        ("tl", ''),  ## translation language
+        ("q", ''),  ## query translation
         ("ie", 'UTF-8'),
         ("oe", 'UTF-8'),
         ("multires", 1),
@@ -103,13 +103,15 @@ class Remote(object):
     @property
     def params(self):
         return dict(self._params)
+
     @property
     def source(self):
         return self._source
+
     @property
     def headers(self):
         return self._headers
+
     @property
     def opts(self):
         return self._opts
-

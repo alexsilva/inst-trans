@@ -14,7 +14,7 @@ class Style(object):
     def __str__(self):
         rules = ["{0}:{1}".format(*args) for args in self.params.items()]
         rules = ";".join(rules)
-        return 'style="{rules}"'.format(rules = rules)
+        return 'style="{rules}"'.format(rules=rules)
 
     def __unicode__(self):
         return self.__class__.__str__(self).decode("utf-8")

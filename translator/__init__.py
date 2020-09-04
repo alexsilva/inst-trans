@@ -1,9 +1,11 @@
 # coding: utf-8
 __author__ = 'alex'
 
-import urllib2, urllib
-from config import Config
+import urllib2
+
 from cjson import Json
+from config import Config
+
 
 # ---------------------------------------------------------------------------------------------------------------------
 class Groups(object):
@@ -21,7 +23,8 @@ class Groups(object):
 
     def complex(self):
         group = []
-        try: d = self.data[1]
+        try:
+            d = self.data[1]
         except IndexError:
             d = []
         for i in d:
@@ -30,7 +33,7 @@ class Groups(object):
                 try:
                     if isinstance(i[0], (str, unicode)):
                         rel["name"] = i[0]
-                        rel["words"]= i[1]
+                        rel["words"] = i[1]
                 except IndexError:
                     continue
                 rel["details"] = {}
@@ -54,6 +57,7 @@ class Groups(object):
         }
         return rel
 
+
 # ---------------------------------------------------------------------------------------------------------------------
 class Engine(object):
     """
@@ -76,7 +80,7 @@ class Engine(object):
         """
         request = self.config.getRequest()
 
-        sock = urllib2.urlopen( request )
+        sock = urllib2.urlopen(request)
         data = sock.read()
         sock.close()
 

@@ -1,7 +1,7 @@
 # coding: utf-8
 
-from tag import Tag
 from style import Style
+from tag import Tag
 
 # style test
 style = Style(color='red')
@@ -17,7 +17,7 @@ print tag
 print
 
 # tag inside tag
-li = [Tag(type='li', content='python is the best - %s'%i, style=style) for i in range(3)]
+li = [Tag(type='li', content='python is the best - %s' % i, style=style) for i in range(3)]
 tag = Tag(type='ul', content=li, style=style)
 
 print tag

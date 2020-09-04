@@ -1,6 +1,7 @@
 # coding: utf-8
 from django.db import models
 
+
 class Translation(models.Model):
     """
     source:
@@ -26,6 +27,7 @@ class Translation(models.Model):
     def __unicode__(self):
         return u"{0}: {1}".format(self.source, self.target)
 
+
 class GrammaticalClass(models.Model):
     """
     name:
@@ -37,6 +39,7 @@ class GrammaticalClass(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class Word(models.Model):
     """
     word:
@@ -47,6 +50,7 @@ class Word(models.Model):
 
     def __unicode__(self):
         return self.name
+
 
 class ReverseWord(models.Model):
     """

@@ -1,16 +1,19 @@
 # coding: utf-8
-from PySide import QtCore
 import threading
 
-from translator.config import Config, Translation
-from translator import Engine
+from PySide import QtCore
+
 from db import models
+from translator import Engine
+from translator.config import Config, Translation
+
 
 # ---------------------------------------------------------------------------------------------------------------------
 class Interface(QtCore.QObject):
     start = QtCore.Signal(str)  # Issued at the beginning of the thread processing the Job.
     end = QtCore.Signal(models.Translation)  # issued at the end of the thread processing the Job.
     error = QtCore.Signal(str)  # issued when an exception was raised in the Job processing thread.
+
 
 # ---------------------------------------------------------------------------------------------------------------------
 class Job(threading.Thread):

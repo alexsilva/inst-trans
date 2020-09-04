@@ -1,6 +1,6 @@
 # coding: utf-8
-import re
 import json
+
 
 # ---------------------------------------------------------------------------------------------------------------------
 class Json(object):
@@ -18,4 +18,4 @@ class Json(object):
     def decode(self):
         self._clean()
 
-        return json.loads( self.data )
+        return json.loads(self.data)

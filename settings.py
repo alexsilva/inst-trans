@@ -2,7 +2,7 @@
 import os
 
 SCRIPT_PATH = os.path.dirname(__file__)
-IMAGES_PATH = os.path.join(SCRIPT_PATH,'images')
+IMAGES_PATH = os.path.join(SCRIPT_PATH, 'images')
 
 # Django settings for project.
 DEBUG = True
@@ -16,12 +16,12 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'test.db',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'test.db',  # Or path to database file if using sqlite3.
+        'USER': '',  # Not used with sqlite3.
+        'PASSWORD': '',  # Not used with sqlite3.
+        'HOST': '',  # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',  # Set to empty string for default. Not used with sqlite3.
     }
 }
 
@@ -86,7 +86,7 @@ STATICFILES_FINDERS = ()
 SECRET_KEY = '%p(gve*17ag+48oq%s9yn^o+r7y$7sm-#j^-46_%@#(b$kpoz)'
 
 # List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = ('django.template.loaders.filesystem.Loader', )
+TEMPLATE_LOADERS = ('django.template.loaders.filesystem.Loader',)
 
 MIDDLEWARE_CLASSES = ()
 
@@ -95,9 +95,9 @@ ROOT_URLCONF = ''
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = ''
 
-TEMPLATE_DIRS = (os.path.join(SCRIPT_PATH,"templates").replace(os.sep,"/"))
+TEMPLATE_DIRS = (os.path.join(SCRIPT_PATH, "templates").replace(os.sep, "/"))
 
-INSTALLED_APPS = ("db", )
+INSTALLED_APPS = ("db",)
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

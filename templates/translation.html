@@ -1,52 +1,56 @@
 <html>
-    <head>
-        <style type="text/css">
-            #gm_cls {
-                color: blue;
-            }
-            .gm_cls_group {
-                background-color: antiquewhite;
-                border-bottom-color: red;
-            }
-            #top-box {
-                background-color: blanchedalmond;
-            }
-            h2 {
-                text-align: center;
-            }
-            #dtl_word {
-                background-color: aliceblue;
-            }
-        </style>
-    </head>
+<head>
+    <style type="text/css">
+        #gm_cls {
+            color: blue;
+        }
 
-    <div id="top-box">
-        <h2>{{ queryset.source }} - {{ queryset.target }}</h2>
+        .gm_cls_group {
+            background-color: antiquewhite;
+            border-bottom-color: red;
+        }
+
+        #top-box {
+            background-color: blanchedalmond;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        #dtl_word {
+            background-color: aliceblue;
+        }
+    </style>
+</head>
+
+<div id="top-box">
+    <h2>{{ queryset.source }} - {{ queryset.target }}</h2>
+</div>
+<hr>
+
+{% for grammaticalclass in queryset.grammaticalclass_set.all %}
+    <div class="gm_cls_group">
+        <h3 id="gm_cls">{{ grammaticalclass.name }}</h3>
+        <ul>
+            {% for word in grammaticalclass.word_set.all %}
+                <li>
+                    <a href="#{{ word.name }}">{{ word.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
-    <hr>
 
-    {% for grammaticalclass in queryset.grammaticalclass_set.all %}
-        <div class="gm_cls_group">
-            <h3 id="gm_cls">{{ grammaticalclass.name }}</h3>
-            <ul>
-                {% for word in grammaticalclass.word_set.all %}
-                    <li>
-                        <a href="#{{ word.name }}">{{ word.name }}</a>
-                    </li>
+    {% for word in grammaticalclass.word_set.all %}
+        <div id="{{ word.name }}">
+            <strong id="dtl_word">{{ word.name }}: </strong>
+
+            <i>
+                {% for reverseword in word.reversewords.all %}
+                    {{ reverseword.name }};
                 {% endfor %}
-            </ul>
+            </i>
         </div>
-
-        {% for word in grammaticalclass.word_set.all %}
-            <div id="{{ word.name }}">
-                <strong id="dtl_word">{{ word.name }}: </strong>
-
-                <i>
-                    {% for reverseword in word.reversewords.all %}
-                        {{ reverseword.name }};
-                    {% endfor %}
-                </i>
-            </div>
-        {% endfor %}
     {% endfor %}
+{% endfor %}
 </html>

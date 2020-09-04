@@ -95,7 +95,9 @@ ROOT_URLCONF = ''
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = ''
 
-TEMPLATE_DIRS = (os.path.join(SCRIPT_PATH, "templates").replace(os.sep, "/"))
+TEMPLATE_DIRS = [
+    os.path.join(SCRIPT_PATH, "templates").replace(os.sep, "/")
+]
 
 INSTALLED_APPS = ("db",)
 

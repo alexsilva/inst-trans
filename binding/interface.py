@@ -5,17 +5,14 @@ from PySide import QtCore
 
 from app import models
 from translator import Engine
-from translator.config import Config, Translation
 
 
-# ---------------------------------------------------------------------------------------------------------------------
 class Interface(QtCore.QObject):
     start = QtCore.Signal(str)  # Issued at the beginning of the thread processing the Job.
     end = QtCore.Signal(models.Translation)  # issued at the end of the thread processing the Job.
     error = QtCore.Signal(str)  # issued when an exception was raised in the Job processing thread.
 
 
-# ---------------------------------------------------------------------------------------------------------------------
 class Job(threading.Thread):
     """
      The interface makes processing occurs outside the main thread and allows you
@@ -62,13 +59,11 @@ class Job(threading.Thread):
         try:
             self.signal.start.emit('start')
 
-            translation = Translation(self.text, 'en', 'pt')
-            config = Config(translation)
-            engine = Engine(config)
+            engine = Engine(backends=['translator.backends.google_engine'])
+            results = engine.translate(self.text, source='en', target='pt')
 
-            related = engine.transl()
-            simple = related.get("simple", [])
-            classes = related.get("class", [])
+            simple = results.get("simple", [])
+            classes = results.get("class", [])
 
             # protecting the database against concurrent access.
             with self._db_access_lock:

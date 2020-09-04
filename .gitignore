@@ -2,6 +2,7 @@
 
 # C extensions
 *.so
+test.db
 
 # Packages
 *.egg

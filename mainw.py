@@ -1,6 +1,10 @@
 # coding: utf-8
-
 import os
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
+
+import django
+django.setup()
+
 import sys
 
 from PySide import QtGui, QtCore
@@ -9,7 +13,7 @@ from django.template import Context
 from django.template.loader import get_template
 
 from binding import interface
-from db import models
+from app import models
 from mainw_ui import Ui_mainWindow
 
 # ---------------------------------------------------------------------------------------------------------------------

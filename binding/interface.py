@@ -3,7 +3,7 @@ import threading
 
 from PySide import QtCore
 
-from db import models
+from app import models
 from translator import Engine
 from translator.config import Config, Translation
 

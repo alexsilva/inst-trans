@@ -18,7 +18,7 @@ class Translation(models.Model):
     targetLocale = models.CharField(max_length=25)
 
     class Meta(object):
-        app_label = "db"
+        pass
 
     @property
     def simple(self):

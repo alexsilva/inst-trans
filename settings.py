@@ -90,7 +90,7 @@ TEMPLATE_LOADERS = ('django.template.loaders.filesystem.Loader',)
 
 MIDDLEWARE_CLASSES = ()
 
-ROOT_URLCONF = ''
+ROOT_URLCONF = 'app.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = ''
@@ -99,7 +99,7 @@ TEMPLATE_DIRS = [
     os.path.join(SCRIPT_PATH, "templates").replace(os.sep, "/")
 ]
 
-INSTALLED_APPS = ("db",)
+INSTALLED_APPS = ("app",)
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

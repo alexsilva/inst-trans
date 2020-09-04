@@ -1,6 +1,6 @@
 # coding: utf-8
 import urllib
-import urllib2
+import requests
 
 from remote import Remote
 
@@ -61,20 +61,21 @@ class Config(object):
         """
         params = self.remote.params  # to dict and cache
 
-        params["q"] = self.tranlation.query
+        params["text"] = self.tranlation.query
         params["sl"] = self.tranlation.source
         params["tl"] = self.tranlation.target
 
-        return urllib.urlencode(params)
+        return params
 
     def getRequest(self):
         """
         Creates the request of translation joining all necessary parameters.
         return: urllib2 request object(urllib2.Request).
         """
-        request = urllib2.Request(
+
+        request = requests.get(
             self.remote.source,
-            data=self._createQuery(),
+            params=self._createQuery(),
             headers=self.remote.headers
         )
         return request

@@ -12,7 +12,7 @@ class Json(object):
         self.data = data
 
     def _clean(self):
-        while (self.data.find(",,") > 0):
+        while self.data.find(",,") > 0:
             self.data = self.data.replace(",,", ",")
 
     def decode(self):

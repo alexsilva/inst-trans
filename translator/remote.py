@@ -6,14 +6,14 @@ class Remote(object):
     Guard source parameters translation.
     """
 
-    _source = "https://translate.google.com.br/translate_a/t"
+    _source = "https://translate.google.com/?#view=home"
 
     _params = [
         ("client", 't'),
         ("hl", 'pt-BR'),  ## page locale
         ("sl", ''),  ## source translation
         ("tl", ''),  ## translation language
-        ("q", ''),  ## query translation
+        ("text", ''),  ## query translation
         ("ie", 'UTF-8'),
         ("oe", 'UTF-8'),
         ("multires", 1),
@@ -24,7 +24,7 @@ class Remote(object):
     ]
 
     _headers = {
-        "Host": 'translate.google.com.br',
+        "Host": 'translate.google.com',
         "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:21.0) Gecko/20100101 Firefox/21.0'
     }
 

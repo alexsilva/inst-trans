@@ -1,8 +1,6 @@
 # coding: utf-8
 __author__ = 'alex'
 
-import urllib2
-
 from cjson import Json
 from config import Config
 
@@ -80,11 +78,7 @@ class Engine(object):
         """
         request = self.config.getRequest()
 
-        sock = urllib2.urlopen(request)
-        data = sock.read()
-        sock.close()
-
-        cjson = Json(data)
+        cjson = Json(request.content)
         groups = Groups(cjson.decode())
 
         return groups.related

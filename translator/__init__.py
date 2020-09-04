@@ -1,84 +1,47 @@
 # coding: utf-8
+import inspect
+from .backends import BaseBackend
+
 __author__ = 'alex'
 
-from cjson import Json
-from config import Config
 
-
-# ---------------------------------------------------------------------------------------------------------------------
-class Groups(object):
-    def __init__(self, data):
-        self.data = data
-
-    def simple(self):
-        try:
-            d = self.data[0][0]
-            d = [i for i in d if i]
-        except IndexError:
-            d = []
-        d.reverse()
-        return d
-
-    def complex(self):
-        group = []
-        try:
-            d = self.data[1]
-        except IndexError:
-            d = []
-        for i in d:
-            if type(i) is list:
-                rel = {}
-                try:
-                    if isinstance(i[0], (str, unicode)):
-                        rel["name"] = i[0]
-                        rel["words"] = i[1]
-                except IndexError:
-                    continue
-                rel["details"] = {}
-                try:
-                    for defs in i[-1]:
-                        try:
-                            word, deflist = defs[0], defs[1]
-                            rel["details"][word] = deflist
-                        except IndexError:
-                            continue
-                except Exception:
-                    pass
-                group.append(rel)
-        return group
-
-    @property
-    def related(self):
-        rel = {
-            "simple": self.simple(),
-            "class": self.complex()
-        }
-        return rel
-
-
-# ---------------------------------------------------------------------------------------------------------------------
 class Engine(object):
     """
     Handles all translation engine.
     """
 
-    def __init__(self, config):
-        self.config = config
+    def __init__(self, backends, **options):
+        self.backends = backends
+        self.options = options
 
-    def transl(self):
-        """
-        returns translations in the form of dictionaries.
+    def load_backends(self):
+        backends = []
+        for backend in self.backends:
+            package, module_name = backend.rsplit('.', 1)
+            module = __import__(package,
+                                globals=globals(),
+                                locals=locals(),
+                                fromlist=[module_name])
+            module = getattr(module, module_name)
+            for name in dir(module):
+                _class_obj = getattr(module, name)
+                if inspect.isclass(_class_obj) and \
+                        _class_obj is not BaseBackend and \
+                        issubclass(_class_obj, BaseBackend):
+                    backends.append(_class_obj())
+        return backends
 
-        where the keys:
-         simple: it is the translation of the text in the form of a list.
-         class: the set of grammatical class.
-          - name: the name of the class.
-          - words: words of grammatical class.
-          - details: details of each word
-        """
-        request = self.config.getRequest()
+    def translate(self, text, source=None, target=None, **kwargs):
+        """returns translations in the form of dictionaries"""
+        backends = self.load_backends()
 
-        cjson = Json(request.content)
-        groups = Groups(cjson.decode())
-
-        return groups.related
+        results = []
+        for backend in backends:
+            result = backend.translate(text,
+                                       source=source,
+                                       target=target,
+                                       **kwargs)
+            results.append({
+                backend: result
+            })
+        return results
